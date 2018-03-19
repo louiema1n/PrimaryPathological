@@ -6,4 +6,6 @@
     <string name="actionbar_Exam_text">Exam</string>
     <string name="actionbar_Mine_text">Mine</string>
     <string name="actionbar_Others_text">Others</string>
+    <string name="order">Order</string>
+    <string name="random">Random</string>
 </resources>
