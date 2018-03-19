@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Primary Pathological</string>
     <string name="splash_text">Application loading</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="actionbar_Practice_text">Practice</string>
+    <string name="actionbar_Exam_text">Exam</string>
+    <string name="actionbar_Mine_text">Mine</string>
+    <string name="actionbar_Others_text">Others</string>
 </resources>

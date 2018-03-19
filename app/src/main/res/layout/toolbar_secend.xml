@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_simple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp"
+            android:background="@color/colorAccent"
+            app:navigationIcon="@mipmap/ic_back"
+            android:theme="@style/ToolbarTheme"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="8dp">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                android:gravity="center"
+                android:text="主页"/>
+    </android.support.v7.widget.Toolbar>
+
+</RelativeLayout>

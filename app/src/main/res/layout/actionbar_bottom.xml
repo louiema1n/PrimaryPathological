@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:background="#11000000"
+            android:orientation="horizontal"
+            android:padding="3dp"
+            android:id="@+id/rg_bottom_tag">
+
+        <RadioButton
+                android:text="@string/actionbar_Practice_text"
+                android:drawableTop="@drawable/rb_practice_drawable_selector"
+                android:id="@+id/rb_practice"
+                style="@style/BottomText"/>
+
+        <RadioButton
+                android:text="@string/actionbar_Exam_text"
+                android:drawableTop="@drawable/rb_exam_drawable_selector"
+                android:id="@+id/rb_exam"
+                style="@style/BottomText"/>
+
+        <RadioButton
+                android:text="@string/actionbar_Mine_text"
+                android:drawableTop="@drawable/rb_mine_drawable_selector"
+                android:id="@+id/rb_mine"
+                style="@style/BottomText"/>
+
+        <RadioButton
+                android:text="@string/actionbar_Others_text"
+                android:drawableTop="@drawable/rb_others_drawable_selector"
+                android:id="@+id/rb_others"
+                style="@style/BottomText"/>
+    </RadioGroup>
+</LinearLayout>

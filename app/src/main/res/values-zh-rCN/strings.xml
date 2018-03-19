@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">初级病理技师</string>
     <string name="splash_text">启动中</string>
+    <string name="actionbar_Practice_text">练习</string>
+    <string name="actionbar_Exam_text">考试</string>
+    <string name="actionbar_Mine_text">我的</string>
+    <string name="actionbar_Others_text">其他</string>
 </resources>
