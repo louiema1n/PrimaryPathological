@@ -6,6 +6,7 @@
               android:layout_height="match_parent">
 
     <com.example.louiemain.primarypathological.view.DrawableVerticalButton
+            android:id="@+id/btn_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_order"
@@ -15,6 +16,7 @@
             android:textSize="20sp"/>
 
     <com.example.louiemain.primarypathological.view.DrawableVerticalButton
+            android:id="@+id/btn_random"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_random"
