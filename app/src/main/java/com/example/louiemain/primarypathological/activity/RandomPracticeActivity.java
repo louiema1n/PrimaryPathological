@@ -31,7 +31,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     private Toolbar toolbar_simple;
     private TextView tv_title;
     private Button btn_query;
-    private Button btn_insert;
 
     private DatabaseHelper helper;
     private SQLiteDatabase database;
@@ -55,7 +54,7 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         tv_title.setText(this.getString(R.string.random) + this.getString(R.string.actionbar_Practice_text));
 
         // 获取数据库操作对象
-        helper = new DatabaseHelper(this, "topic", null, 5);
+        helper = new DatabaseHelper(this, "topic", null, 11);
     }
 
     private void initView() {
@@ -63,8 +62,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         tv_title = (TextView) findViewById(R.id.tv_title);
         btn_query = (Button) findViewById(R.id.btn_query);
         btn_query.setOnClickListener(this);
-        btn_insert = (Button) findViewById(R.id.btn_insert);
-        btn_insert.setOnClickListener(this);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_anser = (TextView) findViewById(R.id.tv_anser);
         tv_analysis = (TextView) findViewById(R.id.tv_analysis);
@@ -86,9 +83,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
             case R.id.btn_query:
                 query();
                 break;
-            case R.id.btn_insert:
-                getData();
-                break;
         }
 //        database.close();
     }
@@ -98,8 +92,8 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         database = helper.getReadableDatabase();
         Cursor cursorExam = database.query(TABLE_EXAM,
                 new String[]{"id", "name", "catalog", "type", "eid", "commons", "anser", "analysis", "rid"},
-                null,
-                null,
+                "id = ?",
+                new String[]{"5"},
                 null,
                 null,
                 null);
@@ -139,79 +133,5 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         cursorRadio.close();
     }
 
-    private void insert(String jsonString) {
-        //获得SQLiteDatabase对象，读写模式
-        database = helper.getWritableDatabase();
-
-        //ContentValues类似HashMap，区别是ContentValues只能存简单数据类型，不能存对象
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            ContentValues values = new ContentValues();
-            values.put("name", jsonObject.optString("name"));
-            values.put("catalog", jsonObject.optString("catalog"));
-            values.put("type", jsonObject.optString("type"));
-            values.put("eid", jsonObject.optString("eid"));
-            values.put("commons", jsonObject.optString("commons"));
-            values.put("anser", jsonObject.optString("anser"));
-            values.put("analysis", jsonObject.optString("analysis"));
-            values.put("rid", jsonObject.optInt("rid"));
-            //执行插入操作
-            database.insert(TABLE_EXAM, null, values);
-            values = new ContentValues();
-            String radio = jsonObject.optString("radio");
-            JSONObject radioObj = new JSONObject(radio);
-            values.put("a", radioObj.optString("a"));
-            values.put("b", radioObj.optString("b"));
-            values.put("c", radioObj.optString("c"));
-            values.put("d", radioObj.optString("d"));
-            values.put("e", radioObj.optString("e"));
-            database.insert(TABLE_RADIO, null, values);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 必须开启子线程访问网络-添加权限
-     */
-    private void getData() {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-
-                URL url = null;
-                String result = "";
-                try {
-                    url = new URL("http://192.168.110.94/blcj/get/1");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(3000);
-
-                    if (conn.getResponseCode() == 200) {
-                        // 连接成功
-                        InputStream is = conn.getInputStream();
-                        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                        String str = null;
-                        while ((str = br.readLine()) != null) {
-                            // 还有数据
-                            result += str;
-                        }
-                        br.close();
-                        is.close();
-                        insert(result);
-                    }
-                    conn.disconnect();
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }.start();
-
-    }
 
 }

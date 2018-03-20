@@ -1,8 +1,12 @@
 package com.example.louiemain.primarypathological.activity;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +23,17 @@ import com.example.louiemain.primarypathological.pager.ExamPager;
 import com.example.louiemain.primarypathological.pager.MinePager;
 import com.example.louiemain.primarypathological.pager.OthersPager;
 import com.example.louiemain.primarypathological.pager.PracticePager;
+import com.example.louiemain.primarypathological.utils.DatabaseHelper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup rg_bottom_tag;
 
     private Fragment fragment1, fragment2, fragment3, fragment4;
+
+    private static final String TABLE_EXAM = "blcjexam";
+    private static final String TABLE_RADIO = "radio";
+    private DatabaseHelper helper;
+    private SQLiteDatabase database;
 
     // 视图集合
     private List<BasePager> basePagers;
@@ -65,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar_simple);
 
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
+        // 获取数据库操作对象
+        helper = new DatabaseHelper(this, "topic", null, 11);
     }
 
     @Override
@@ -76,36 +97,139 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_syn_db) {
-            showProgressDialog();
+
+            initDataBase();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showProgressDialog() {
+    /**
+     * @param
+     * @return void
+     * @description 从服务器更新数据到本地数据库
+     * @author louiemain
+     * @date Created on 2018/3/20 20:10
+     */
+    private void initDataBase() {
+        final ProgressDialog progressDialog = getProgressDialog(2140, MainActivity.this.getString(R.string.update));
+        progressDialog.show();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                URL url = null;
+                for (int i = 1; i <= 2140; i++) {
+                    try {
+                        String result = "";
+                        url = new URL("http://192.168.1.102/blcj/get/" + i);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        conn.setConnectTimeout(3000);
+
+                        if (conn.getResponseCode() == 200) {
+                            // 连接成功
+                            InputStream is = conn.getInputStream();
+                            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                            String str = null;
+                            while ((str = br.readLine()) != null) {
+                                // 还有数据
+                                result += str;
+                            }
+                            br.close();
+                            is.close();
+                            insert(result);
+                        }
+                        conn.disconnect();
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // 更新进度条
+                    progressDialog.incrementProgressBy(i);
+                }
+            }
+        }.start();
+        // 关闭数据库
+//        database.close();
+    }
+
+    /**
+     * @param result
+     * @return void
+     * @description 插入数据到数据库
+     * @author louiemain
+     * @date Created on 2018/3/20 20:17
+     */
+    private void insert(String result) {
+        //获得SQLiteDatabase对象，读写模式
+        database = helper.getWritableDatabase();
+
+        //ContentValues类似HashMap，区别是ContentValues只能存简单数据类型，不能存对象
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            ContentValues values = new ContentValues();
+            values.put("name", jsonObject.optString("name"));
+            values.put("catalog", jsonObject.optString("catalog"));
+            values.put("type", jsonObject.optString("type"));
+            values.put("eid", jsonObject.optString("eid"));
+            values.put("commons", jsonObject.optString("commons"));
+            values.put("anser", jsonObject.optString("anser"));
+            values.put("analysis", jsonObject.optString("analysis"));
+            values.put("rid", jsonObject.optInt("rid"));
+            //执行插入操作
+            database.insert(TABLE_EXAM, null, values);
+            values = new ContentValues();
+            String radio = jsonObject.optString("radio");
+            JSONObject radioObj = new JSONObject(radio);
+            values.put("a", radioObj.optString("a"));
+            values.put("b", radioObj.optString("b"));
+            values.put("c", radioObj.optString("c"));
+            values.put("d", radioObj.optString("d"));
+            values.put("e", radioObj.optString("e"));
+            database.insert(TABLE_RADIO, null, values);
+
+            database.close();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @description 创建一个进度条
+     * @author louiemain
+     * @date Created on 2018/3/20 20:22
+     * @param max
+     * @param title
+     * @return android.app.ProgressDialog
+     */
+    private ProgressDialog getProgressDialog(int max, String title) {
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMax(100);
+        progressDialog.setMax(max);
         progressDialog.setCancelable(false);     // 设置点击back键取消
         progressDialog.setCanceledOnTouchOutside(false); // 设置是否点击dialog外其他区域取消进度条
-        progressDialog.setTitle("我是进度条");
-        progressDialog.incrementProgressBy(20);
+        progressDialog.setTitle(title);
+        progressDialog.incrementProgressBy(0);
         progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "你点击了取消", Toast.LENGTH_SHORT).show();
+                // 取消进度条
+                dialog.dismiss();
             }
         });
 
         // 条形进度条
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
-        progressDialog.show();
+        return progressDialog;
     }
 
     /**
+     * @param
      * @Description: 设置监听
      * @Author: louiemain
      * @Date: 2018-03-19 12:22
-     * @param
      * @return:
      */
     class MyOnCheckedChangeListener implements RadioGroup.OnCheckedChangeListener {
@@ -157,10 +281,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * @param fragment
      * @Description: 隐藏所有fragment，显示当前点击fragment
      * @Author: louiemain
      * @Date: 2018-03-19 17:09
-     * @param fragment
      * @return: void
      */
     private void showFragment(Fragment fragment) {
@@ -191,10 +315,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * @param index
      * @Description: 根据当前视图实例化对应的fragment
      * @Author: louiemain
      * @Date: 2018-03-19 17:10
-     * @param index
      * @return: android.support.v4.app.Fragment
      */
     private Fragment getFragment(int index) {
@@ -217,10 +341,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * @param
      * @Description: 添加fragment到transaction
      * @Author: louiemain
      * @Date: 2018-03-19 11:55
-     * @param
      * @return: void
      */
     private void addFragment(Fragment fragment) {

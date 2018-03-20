@@ -7,4 +7,5 @@
     <string name="actionbar_Others_text">其他</string>
     <string name="order">顺序</string>
     <string name="random">随机</string>
+    <string name="update">更新数据</string>
 </resources>
