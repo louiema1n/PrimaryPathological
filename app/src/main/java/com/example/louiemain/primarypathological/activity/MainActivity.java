@@ -1,16 +1,18 @@
 package com.example.louiemain.primarypathological.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.base.BasePager;
 import com.example.louiemain.primarypathological.pager.ExamPager;
@@ -21,7 +23,7 @@ import com.example.louiemain.primarypathological.pager.PracticePager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar_simple;
 
@@ -59,9 +61,44 @@ public class MainActivity extends FragmentActivity {
         toolbar_simple = (Toolbar) findViewById(R.id.toolbar_simple);
 
         // 设置menu
-        toolbar_simple.inflateMenu(R.menu.menu);
+//        toolbar_simple.inflateMenu(R.menu.menu);
+        setSupportActionBar(toolbar_simple);
 
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_syn_db) {
+            showProgressDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showProgressDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMax(100);
+        progressDialog.setCancelable(false);     // 设置点击back键取消
+        progressDialog.setCanceledOnTouchOutside(false); // 设置是否点击dialog外其他区域取消进度条
+        progressDialog.setTitle("我是进度条");
+        progressDialog.incrementProgressBy(20);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "你点击了取消", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 条形进度条
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+        progressDialog.show();
     }
 
     /**
@@ -111,6 +148,9 @@ public class MainActivity extends FragmentActivity {
                     }
                     // 设置Fragment
                     showFragment(fragment4);
+                    break;
+                case R.id.action_syn_db:
+                    Toast.makeText(MainActivity.this, "同步数据库", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

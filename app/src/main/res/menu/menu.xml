@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/action_setting"
-            android:icon="@mipmap/ic_settings"
+            android:id="@+id/action_syn_db"
+            android:icon="@mipmap/ic_database"
             android:title=""
             app:showAsAction="ifRoom"/>
 </menu>

@@ -16,11 +16,24 @@ import android.database.sqlite.SQLiteOpenHelper;
  **/
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private String createSQL = "create table student("
-            + "id integer primary key  autoincrement not null ,"
-            + "name varchar(20) not null,"
-            + "age integer not null ,"
-            + "gender varchar(2) not null)";
+    private String createExam = "CREATE TABLE if not exists blcjexam (" +
+            "  id integer primary key  autoincrement not null," +
+            "  name varchar(2550) NOT NULL," +
+            "  catalog varchar(255) NOT NULL," +
+            "  type varchar(255) NOT NULL," +
+            "  eid varchar(255) DEFAULT NULL," +
+            "  commons varchar(2550) DEFAULT NULL," +
+            "  anser varchar(255) DEFAULT NULL," +
+            "  analysis varchar(5550) DEFAULT NULL," +
+            "  rid integer DEFAULT NULL)";
+
+    private String createRadio = "CREATE TABLE  if not exists radio (" +
+            "  id integer primary key  autoincrement not null," +
+            "  a varchar(2550) DEFAULT NULL," +
+            "  b varchar(2550) DEFAULT NULL," +
+            "  c varchar(2550) DEFAULT NULL," +
+            "  d varchar(2550) DEFAULT NULL," +
+            "  e varchar(2550) DEFAULT NULL)";
 
     /**
      * @description 调用父类的构造函数
@@ -46,7 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createSQL);
+        db.execSQL(createExam);
+        db.execSQL(createRadio);
     }
 
     /**
@@ -61,7 +75,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("ALTER TABLE student ADD COLUMN other TEXT");
+        db.execSQL("drop table if exists blcjexam");
+        db.execSQL("drop table if exists radio");
+
+        onCreate(db);
     }
 
     /**
