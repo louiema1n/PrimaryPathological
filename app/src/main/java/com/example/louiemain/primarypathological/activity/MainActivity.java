@@ -3,6 +3,7 @@ package com.example.louiemain.primarypathological.activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper helper;
     private SQLiteDatabase database;
 
+    private ProgressDialog progressDialog;
+
     // 视图集合
     private List<BasePager> basePagers;
     // 当前点击视图的位置-对应其在集合中的index
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
         // 获取数据库操作对象
-        helper = new DatabaseHelper(this, "topic", null, 11);
+        helper = new DatabaseHelper(this, "topic", null, 13);
     }
 
     @Override
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
      * @date Created on 2018/3/20 20:10
      */
     private void initDataBase() {
-        final ProgressDialog progressDialog = getProgressDialog(2140, MainActivity.this.getString(R.string.update));
+        progressDialog = getProgressDialog(2140, MainActivity.this.getString(R.string.update));
         progressDialog.show();
         new Thread() {
             @Override
@@ -146,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    // 更新进度条
-                    progressDialog.incrementProgressBy(i);
+
                 }
             }
         }.start();
@@ -166,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         //获得SQLiteDatabase对象，读写模式
         database = helper.getWritableDatabase();
 
+        database.beginTransaction();
         //ContentValues类似HashMap，区别是ContentValues只能存简单数据类型，不能存对象
         try {
             JSONObject jsonObject = new JSONObject(result);
@@ -189,20 +192,33 @@ public class MainActivity extends AppCompatActivity {
             values.put("d", radioObj.optString("d"));
             values.put("e", radioObj.optString("e"));
             database.insert(TABLE_RADIO, null, values);
+            // 更新进度条
+            String sql = "select last_insert_rowid() from " + TABLE_RADIO;
+            Cursor cursor = database.rawQuery(sql, null);
+            int a = -1;
+            if (cursor.moveToFirst()) {
+                a = cursor.getInt(0);
+            }
+            progressDialog.incrementProgressBy(a);
 
-            database.close();
+            // 设置事务成功
+            database.setTransactionSuccessful();
         } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+            // 结束事务
+            database.endTransaction();
+            database.close();
         }
     }
 
     /**
-     * @description 创建一个进度条
-     * @author louiemain
-     * @date Created on 2018/3/20 20:22
      * @param max
      * @param title
      * @return android.app.ProgressDialog
+     * @description 创建一个进度条
+     * @author louiemain
+     * @date Created on 2018/3/20 20:22
      */
     private ProgressDialog getProgressDialog(int max, String title) {
         ProgressDialog progressDialog = new ProgressDialog(this);
