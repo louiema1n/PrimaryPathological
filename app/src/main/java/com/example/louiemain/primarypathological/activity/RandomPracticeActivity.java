@@ -1,6 +1,5 @@
 package com.example.louiemain.primarypathological.activity;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,8 +22,8 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
     private static final String TABLE_RADIO = "radio";
     private Toolbar toolbar_practice;
     private TextView tv_title;
-
-    private DatabaseHelper helper;
+    // 获取数据库操作对象
+    private DatabaseHelper helper = new DatabaseHelper(this, "topic", null, 13);
     private SQLiteDatabase database;
     private TextView tv_name;
     private TextView tv_anser;
@@ -51,11 +50,8 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
 
         tv_title.setText(this.getString(R.string.random) + this.getString(R.string.actionbar_Practice_text));
 
-        // 获取数据库操作对象
-        helper = new DatabaseHelper(this, "topic", null, 13);
-
         // 随机生成试题
-        radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
+        randomPractice(String.valueOf(new Random().nextInt(2140) + 1));
 
         // 隐藏答案及解析
         ly_result_analysis.setVisibility(View.GONE);
@@ -98,7 +94,7 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
     /**
      * 随机生成试题
      */
-    private void radnomPractice(String id) {
+    private void randomPractice(String id) {
         // 得到数据库操作对象-读取模式
         database = helper.getReadableDatabase();
         try {
@@ -159,6 +155,7 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
 
     private void initView() {
         toolbar_practice = (Toolbar) findViewById(R.id.toolbar_practice);
+
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_anser = (TextView) findViewById(R.id.tv_anser);
@@ -190,12 +187,17 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_next) {
-            // 刷新
-            onCreate(null);
+        switch (item.getItemId()) {
+            case R.id.action_next:
+                // 刷新
+                onDestroy();
+                onCreate(null);
+                // 生成随机id
+                randomPractice(String.valueOf(new Random().nextInt(2140) + 1));
+                break;
+            case android.R.id.home:     // 必须有android
+                finish();
 
-            // 生成随机id
-            radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -220,5 +222,6 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
                 break;
         }
     }
+
 }
 
