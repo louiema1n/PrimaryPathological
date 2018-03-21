@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         String result = "";
-                        url = new URL("http://192.168.110.94/blcj/get/" + i);
+//                        url = new URL("http://192.168.110.94/blcj/get/" + i);
+                        url = new URL("http://192.168.1.102/blcj/get/" + i);
                         conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("GET");
                         conn.setConnectTimeout(3000);
