@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.utils.DatabaseHelper;
 
@@ -35,6 +32,15 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     private RadioButton rb_d;
     private RadioButton rb_e;
     private Button btn_query;
+    private TextView tv_commons;
+    private RadioGroup rg_option;
+
+    // 正确答案
+    private String anser;
+    // 位置
+    private int position;
+    private LinearLayout ly_result_analysis;
+    private LinearLayout ll_exam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,43 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
 
         // 随机生成试题
         radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
+
+        // 隐藏答案及解析
+        ly_result_analysis.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示正确答案
+     */
+    private void initRightResult() {
+        // 禁用所有选项
+        for (int i = 0; i < rg_option.getChildCount(); i++) {
+            rg_option.getChildAt(i).setEnabled(false);
+        }
+        // 显示正确答案
+        switch (anser) {
+            case "A":
+                position = 0;
+                break;
+            case "B":
+                position = 1;
+                break;
+            case "C":
+                position = 2;
+                break;
+            case "D":
+                position = 3;
+                break;
+            case "E":
+                position = 4;
+                break;
+        }
+        RadioButton button = (RadioButton) rg_option.getChildAt(position);
+        // 不能使用button.setTextColor(R.color.colorAccent);
+        button.setTextColor(this.getResources().getColor(R.color.colorRbRight, null));
+
+        // 显示答案及解析
+        ly_result_analysis.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -60,8 +103,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         // 得到数据库操作对象-读取模式
         database = helper.getReadableDatabase();
         try {
-
-
             Cursor cursorExam = database.query(TABLE_EXAM,
                     new String[]{"id", "name", "catalog", "type", "eid", "commons", "anser", "analysis", "rid"},
                     "id = ?",
@@ -75,9 +116,13 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
 //        String rid = cursorExam.getString(cursorExam.getColumnIndex("rid"));
             if (cursorExam != null) {
                 // 设置exam
+                String commons = cursorExam.getString(cursorExam.getColumnIndex("commons"));    // commons
+                commons = commons.replace("<br>", "\n");
+                anser = cursorExam.getString(cursorExam.getColumnIndex("anser"));        // anser
                 tv_name.setText(cursorExam.getString(cursorExam.getColumnIndex("name")));
-                tv_anser.setText("答案 " + cursorExam.getString(cursorExam.getColumnIndex("anser")));
+                tv_anser.setText("答案 " + anser);
                 tv_analysis.setText(cursorExam.getString(cursorExam.getColumnIndex("analysis")));
+                tv_commons.setText(commons);
             } else {
                 Log.i("msg", "未查询到数据Exam");
             }
@@ -131,14 +176,36 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         rb_e.setOnClickListener(this);
         btn_query = (Button) findViewById(R.id.btn_query);
         btn_query.setOnClickListener(this);
+        tv_commons = (TextView) findViewById(R.id.tv_commons);
+        rg_option = (RadioGroup) findViewById(R.id.rg_option);
+        ly_result_analysis = (LinearLayout) findViewById(R.id.ly_result_analysis);
+        ll_exam = (LinearLayout) findViewById(R.id.ll_exam);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_query:
+                // 刷新
+                onCreate(null);
+
                 // 生成随机id
                 radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
+                break;
+            case R.id.rb_a:
+                initRightResult();
+                break;
+            case R.id.rb_b:
+                initRightResult();
+                break;
+            case R.id.rb_c:
+                initRightResult();
+                break;
+            case R.id.rb_d:
+                initRightResult();
+                break;
+            case R.id.rb_e:
+                initRightResult();
                 break;
         }
     }

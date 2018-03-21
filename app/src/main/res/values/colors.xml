@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRbChecked">#019688</color>
+    <color name="colorRbDisable">#a5a1a7</color>
+    <color name="colorRbRight">@android:color/holo_blue_dark</color>
 </resources>
