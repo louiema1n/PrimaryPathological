@@ -2,6 +2,7 @@ package com.example.louiemain.primarypathological.activity;
 
 import android.app.Activity;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.utils.DatabaseHelper;
 
@@ -57,49 +59,58 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     private void radnomPractice(String id) {
         // 得到数据库操作对象-读取模式
         database = helper.getReadableDatabase();
+        try {
 
-        Cursor cursorExam = database.query(TABLE_EXAM,
-                new String[]{"id", "name", "catalog", "type", "eid", "commons", "anser", "analysis", "rid"},
-                "id = ?",
-                new String[]{id},
-                null,
-                null,
-                null);
 
-        // cursor置顶
-        cursorExam.moveToFirst();
+            Cursor cursorExam = database.query(TABLE_EXAM,
+                    new String[]{"id", "name", "catalog", "type", "eid", "commons", "anser", "analysis", "rid"},
+                    "id = ?",
+                    new String[]{id},
+                    null,
+                    null,
+                    null);
+
+            // cursor置顶
+            cursorExam.moveToFirst();
 //        String rid = cursorExam.getString(cursorExam.getColumnIndex("rid"));
-        if (cursorExam != null) {
-            // 设置exam
-            tv_name.setText(cursorExam.getString(cursorExam.getColumnIndex("name")));
-            tv_anser.setText("答案 " + cursorExam.getString(cursorExam.getColumnIndex("anser")));
-            tv_analysis.setText(cursorExam.getString(cursorExam.getColumnIndex("analysis")));
-        } else {
-            Log.i("msg", "未查询到数据Exam");
-        }
+            if (cursorExam != null) {
+                // 设置exam
+                tv_name.setText(cursorExam.getString(cursorExam.getColumnIndex("name")));
+                tv_anser.setText("答案 " + cursorExam.getString(cursorExam.getColumnIndex("anser")));
+                tv_analysis.setText(cursorExam.getString(cursorExam.getColumnIndex("analysis")));
+            } else {
+                Log.i("msg", "未查询到数据Exam");
+            }
 
-        Cursor cursorRadio = database.query(TABLE_RADIO,
-                new String[]{"id", "a", "b", "c", "d", "e"},
-                "id = ?",
-                new String[]{id},
-                null,
-                null,
-                null);
-        cursorRadio.moveToFirst();
+            Cursor cursorRadio = database.query(TABLE_RADIO,
+                    new String[]{"id", "a", "b", "c", "d", "e"},
+                    "id = ?",
+                    new String[]{id},
+                    null,
+                    null,
+                    null);
+            cursorRadio.moveToFirst();
 
-        if (cursorRadio != null) {
-            // 设置Radio
-            rb_a.setText(cursorRadio.getString(cursorRadio.getColumnIndex("a")));
-            rb_b.setText(cursorRadio.getString(cursorRadio.getColumnIndex("b")));
-            rb_c.setText(cursorRadio.getString(cursorRadio.getColumnIndex("c")));
-            rb_d.setText(cursorRadio.getString(cursorRadio.getColumnIndex("d")));
-            rb_e.setText(cursorRadio.getString(cursorRadio.getColumnIndex("e")));
-        } else {
-            Log.i("msg", "未查询到数据Radio");
+            if (cursorRadio != null) {
+                // 设置Radio
+                rb_a.setText(cursorRadio.getString(cursorRadio.getColumnIndex("a")));
+                rb_b.setText(cursorRadio.getString(cursorRadio.getColumnIndex("b")));
+                rb_c.setText(cursorRadio.getString(cursorRadio.getColumnIndex("c")));
+                rb_d.setText(cursorRadio.getString(cursorRadio.getColumnIndex("d")));
+                rb_e.setText(cursorRadio.getString(cursorRadio.getColumnIndex("e")));
+            } else {
+                Log.i("msg", "未查询到数据Radio");
+            }
+            cursorExam.close();
+            cursorRadio.close();
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "未查询到数据，请先同步远程数据库。", Toast.LENGTH_SHORT).show();
+            // 结束当前视图
+            finish();
+        } finally {
+            database.close();
         }
-        cursorExam.close();
-        cursorRadio.close();
-        database.close();
     }
 
     private void initView() {

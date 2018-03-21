@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.*;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -32,14 +34,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int LINK_NETWORK_FAIL = 0;
+    private static final int UPDATE_SUCCESS = 1;
+    private static final int SOCKET_TIMEOUT = 2;
+    private static final int UPDATE_FAILURE = 3;
     private Toolbar toolbar_simple;
 
     private RadioGroup rg_bottom_tag;
@@ -52,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase database;
 
     private ProgressDialog progressDialog;
+
+    // 是否中断线程
+    private boolean ifInterrupt = false;
 
     // 视图集合
     private List<BasePager> basePagers;
@@ -120,14 +127,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
+
+                // 解决 Can't create handler inside thread that has not called Looper.prepare()
+                Looper.prepare();
+
+                HttpURLConnection conn = null;
                 URL url = null;
-                for (int i = 1; i <= 2140; i++) {
+                int i = 1;
+                for (; i <= 2140; i++) {
+                    if (ifInterrupt) {
+                        // 终止线程
+                        break;
+                    }
                     try {
                         String result = "";
-                        url = new URL("http://192.168.1.102/blcj/get/" + i);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        url = new URL("http://192.168.110.94/blcj/get/" + i);
+                        conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("GET");
                         conn.setConnectTimeout(3000);
+                        conn.setReadTimeout(3000);
 
                         if (conn.getResponseCode() == 200) {
                             // 连接成功
@@ -142,20 +160,56 @@ public class MainActivity extends AppCompatActivity {
                             is.close();
                             insert(result);
                         }
-                        conn.disconnect();
-
-                    } catch (MalformedURLException e) {
+                    } catch (SocketTimeoutException e) {
+                        // 超时处理
+                        handler.sendEmptyMessage(SOCKET_TIMEOUT);
                         e.printStackTrace();
+                        break;
+                    } catch (UnknownHostException e) {
+                        // 异常主机处理
+                        handler.sendEmptyMessage(LINK_NETWORK_FAIL);
+                        e.printStackTrace();
+                        break;
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        // 关闭连接
+                        conn.disconnect();
                     }
-
+                }
+                if (i == 2141) {
+                    handler.sendEmptyMessage(UPDATE_SUCCESS);
+                } else {
+                    handler.sendEmptyMessage(UPDATE_FAILURE);
                 }
             }
         }.start();
         // 关闭数据库
 //        database.close();
     }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case LINK_NETWORK_FAIL:
+                    Toast.makeText(MainActivity.this, "连接服务器失败，请稍后重试。", Toast.LENGTH_SHORT).show();
+                    break;
+                case UPDATE_SUCCESS:
+                    Toast.makeText(MainActivity.this, "数据更新成功。", Toast.LENGTH_SHORT).show();
+                    break;
+                case UPDATE_FAILURE:
+                    Toast.makeText(MainActivity.this, "数据更新失败，线程被终止。请退出程序后重试。", Toast.LENGTH_SHORT).show();
+                    break;
+                case SOCKET_TIMEOUT:
+                    Toast.makeText(MainActivity.this, "服务器连接超时，请稍后重试。", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            progressDialog.dismiss();
+
+        }
+    };
 
     /**
      * @param result
@@ -199,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
             if (cursor.moveToFirst()) {
                 a = cursor.getInt(0);
             }
-            progressDialog.incrementProgressBy(a);
+            progressDialog.setProgress(a);
+
 
             // 设置事务成功
             database.setTransactionSuccessful();
@@ -232,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // 取消进度条
                 dialog.dismiss();
+                ifInterrupt = true;
             }
         });
 
