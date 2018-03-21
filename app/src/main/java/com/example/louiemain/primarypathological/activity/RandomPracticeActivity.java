@@ -195,7 +195,7 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
                 // 生成随机id
                 randomPractice(String.valueOf(new Random().nextInt(2140) + 1));
                 break;
-            case android.R.id.home:     // 必须有android
+            case android.R.id.home:     // 必须有android（返回按钮）
                 finish();
 
         }
