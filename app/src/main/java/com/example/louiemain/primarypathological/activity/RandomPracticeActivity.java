@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.example.louiemain.primarypathological.R;
@@ -14,11 +17,11 @@ import com.example.louiemain.primarypathological.utils.DatabaseHelper;
 
 import java.util.Random;
 
-public class RandomPracticeActivity extends Activity implements View.OnClickListener {
+public class RandomPracticeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TABLE_EXAM = "blcjexam";
     private static final String TABLE_RADIO = "radio";
-    private Toolbar toolbar_simple;
+    private Toolbar toolbar_practice;
     private TextView tv_title;
 
     private DatabaseHelper helper;
@@ -31,7 +34,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     private RadioButton rb_c;
     private RadioButton rb_d;
     private RadioButton rb_e;
-    private Button btn_query;
     private TextView tv_commons;
     private RadioGroup rg_option;
 
@@ -40,7 +42,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     // 位置
     private int position;
     private LinearLayout ly_result_analysis;
-    private LinearLayout ll_exam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,6 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_random_practice);
         initView();
 
-        // 设置menu
-        toolbar_simple.inflateMenu(R.menu.menu);
         tv_title.setText(this.getString(R.string.random) + this.getString(R.string.actionbar_Practice_text));
 
         // 获取数据库操作对象
@@ -159,7 +158,7 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
     }
 
     private void initView() {
-        toolbar_simple = (Toolbar) findViewById(R.id.toolbar_simple);
+        toolbar_practice = (Toolbar) findViewById(R.id.toolbar_practice);
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_anser = (TextView) findViewById(R.id.tv_anser);
@@ -174,24 +173,36 @@ public class RandomPracticeActivity extends Activity implements View.OnClickList
         rb_d.setOnClickListener(this);
         rb_e = (RadioButton) findViewById(R.id.rb_e);
         rb_e.setOnClickListener(this);
-        btn_query = (Button) findViewById(R.id.btn_query);
-        btn_query.setOnClickListener(this);
         tv_commons = (TextView) findViewById(R.id.tv_commons);
         rg_option = (RadioGroup) findViewById(R.id.rg_option);
         ly_result_analysis = (LinearLayout) findViewById(R.id.ly_result_analysis);
-        ll_exam = (LinearLayout) findViewById(R.id.ll_exam);
+
+        // 设置toolbar
+        setSupportActionBar(toolbar_practice);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_practice, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_next) {
+            // 刷新
+            onCreate(null);
+
+            // 生成随机id
+            radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_query:
-                // 刷新
-                onCreate(null);
-
-                // 生成随机id
-                radnomPractice(String.valueOf(new Random().nextInt(2140) + 1));
-                break;
             case R.id.rb_a:
                 initRightResult();
                 break;
