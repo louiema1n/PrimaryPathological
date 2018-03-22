@@ -1,127 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        android:id="@+id/ll_exam_root"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.example.louiemain.primarypathological.activity.RandomPracticeActivity">
-
-    <!-- toolbar -->
-    <include layout="@layout/toolbar_secend"/>
+<ScrollView android:id="@+id/ll_exam_root"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.louiemain.primarypathological.activity.RandomPracticeActivity">
 
     <LinearLayout
-            android:id="@+id/ll_exam"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textSize="20sp"
-                android:textColor="@android:color/black"
-                android:text="这是题目"/>
+        <!-- toolbar -->
+        <include layout="@layout/toolbar_secend"/>
 
-        <RadioGroup
-                android:id="@+id/rg_option"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-            <RadioButton
-                    android:id="@+id/rb_a"
-                    android:layout_width="match_parent"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@drawable/rb_textcolor_selector"
-                    android:text="A"/>
-            <RadioButton
-                    android:id="@+id/rb_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="18sp"
-                    android:textColor="@drawable/rb_textcolor_selector"
-                    android:text="B"/>
-            <RadioButton
-                    android:id="@+id/rb_c"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="18sp"
-                    android:textColor="@drawable/rb_textcolor_selector"
-                    android:text="C"/>
-            <RadioButton
-                    android:id="@+id/rb_d"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="18sp"
-                    android:textColor="@drawable/rb_textcolor_selector"
-                    android:text="D"/>
-            <RadioButton
-                    android:id="@+id/rb_e"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="18sp"
-                    android:textColor="@drawable/rb_textcolor_selector"
-                    android:text="E"/>
-        </RadioGroup>
-
-        <TextView
-                android:id="@+id/tv_commons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="18sp"/>
         <LinearLayout
-                android:id="@+id/ly_result_analysis"
+                android:id="@+id/ll_exam"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
+
             <TextView
-                    android:id="@+id/tv_anser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:text="答案 B"/>
-            <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:text="试题解析"/>
-            <TextView
-                    android:id="@+id/tv_analysis"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:textSize="18sp"
-                    android:text="这是解析这是解析这是解析这是解析这是解析这是解析这是解析"
-                    />
-        </LinearLayout>
-    </LinearLayout>
+                    android:textSize="20sp"
+                    android:textColor="@android:color/black"
+                    android:text="这是题目"/>
 
-</LinearLayout>
+            <RadioGroup
+                    android:id="@+id/rg_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                <RadioButton
+                        android:id="@+id/rb_a"
+                        android:layout_width="match_parent"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="15dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/rb_textcolor_selector"
+                        android:text="A"/>
+
+                <RadioButton
+                        android:id="@+id/rb_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="15dp"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/rb_textcolor_selector"
+                        android:text="B"/>
+
+                <RadioButton
+                        android:id="@+id/rb_c"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="15dp"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/rb_textcolor_selector"
+                        android:text="C"/>
+
+                <RadioButton
+                        android:id="@+id/rb_d"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="15dp"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/rb_textcolor_selector"
+                        android:text="D"/>
+
+                <RadioButton
+                        android:id="@+id/rb_e"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="15dp"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/rb_textcolor_selector"
+                        android:text="E"/>
+            </RadioGroup>
+
+            <TextView
+                    android:id="@+id/tv_commons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"/>
+
+            <LinearLayout
+                    android:id="@+id/ly_result_analysis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/tv_anser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:text="答案 B"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="试题解析"/>
+
+                <TextView
+                        android:id="@+id/tv_analysis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textSize="18sp"
+                        android:text="这是解析这是解析这是解析这是解析这是解析这是解析这是解析"
+                        />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
