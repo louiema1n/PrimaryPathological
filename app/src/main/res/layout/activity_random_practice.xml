@@ -104,7 +104,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:text="答案 B"/>
@@ -113,7 +112,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:layout_weight="1"
                     android:text="试题解析"/>
             <TextView
                     android:id="@+id/tv_analysis"
