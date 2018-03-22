@@ -3,6 +3,7 @@ package com.example.louiemain.primarypathological.activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.base.BasePracticeActivity;
 
@@ -37,7 +38,12 @@ public class OrderPracticeActivity extends BasePracticeActivity {
                 onDestroy();
                 onCreate(null);
                 // 生成随机id
-                super.generatePractice(String.valueOf(++id));
+                if (id++ > 2140) {
+                    finish();
+                    Toast.makeText(this, "恭喜你！完成了所有的题目练习。", Toast.LENGTH_SHORT).show();
+                } else {
+                    super.generatePractice(String.valueOf(id));
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
