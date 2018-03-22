@@ -49,5 +49,20 @@ public class RandomPracticeActivity extends BasePracticeActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void leftFlyingHandle() {
+        // 刷新
+        onDestroy();
+        onCreate(null);
+        // 生成随机id
+        id = String.valueOf(new Random().nextInt(2140) + 1);
+        super.generatePractice(id);
+    }
+
+    @Override
+    protected void rightFlyingHandle() {
+
+    }
 }
 

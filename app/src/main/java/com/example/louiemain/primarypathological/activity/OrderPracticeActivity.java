@@ -39,20 +39,51 @@ public class OrderPracticeActivity extends BasePracticeActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_next:
-                id++;
-                // 刷新
-                onDestroy();
-                onCreate(null);
-                // 生成随机id
-                if (id > 2140) {
-                    finish();
-                    Toast.makeText(this, "恭喜你！完成了所有的题目练习。", Toast.LENGTH_SHORT).show();
-                } else {
-                    super.generatePractice(String.valueOf(id));
-                }
+                nextTopic();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 下一个题目
+     */
+    public void nextTopic() {
+        id++;
+        // 刷新
+        onDestroy();
+        onCreate(null);
+        // 生成随机id
+        if (id > 2140) {
+            finish();
+            Toast.makeText(this, "恭喜你！完成了所有的题目练习。", Toast.LENGTH_SHORT).show();
+        } else {
+            super.generatePractice(String.valueOf(id));
+        }
+    }
+
+    /**
+     * 上一个题目
+     */
+    public void upTopic() {
+        id--;
+        if (id < 1) {
+            Toast.makeText(this, "这是第一个题目，别翻了。", Toast.LENGTH_SHORT).show();
+        } else {
+            onDestroy();
+            onCreate(null);
+            super.generatePractice(String.valueOf(id));
+        }
+    }
+
+    @Override
+    protected void leftFlyingHandle() {
+        nextTopic();
+    }
+
+    @Override
+    protected void rightFlyingHandle() {
+        upTopic();
     }
 
 }

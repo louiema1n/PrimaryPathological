@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -47,6 +48,8 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
 
     // 定义gestureDetector手势识别器
     private GestureDetector gestureDetector;
+
+    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,29 +266,51 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-    private static final int FLING_MIN_DISTANCE = 50;   //最小距离
+    private int FLING_MIN_DISTANCE = (int) (width * 0.5);   //最小距离
     private static final int FLING_MIN_VELOCITY = 20;  //最小速度
     GestureDetector.SimpleOnGestureListener MyGestureDetector = new  GestureDetector.SimpleOnGestureListener() {
         // 滑动结束时触发
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            getWindowWidthAndHeight();
             float left = e1.getX() - e2.getX();     // e1.getX() > e2.getX()-左
             float right = e2.getX() - e1.getX();     // e1.getX() > e2.getX()-左
             // 向右滑
             if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                Toast.makeText(BasePracticeActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+                rightFlyingHandle();
             } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
                 // 向左滑
-                Toast.makeText(BasePracticeActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
+                leftFlyingHandle();
             }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
     };
+
+    /**
+     * 左滑处理
+     */
+    protected abstract void leftFlyingHandle();
+
+    /**
+     * 右滑处理
+     */
+    protected abstract void rightFlyingHandle();
 
     // 将触摸事件传递给gestureDetector-当子view消费touch事件时使用dispatchTouchEvent
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         gestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 获取屏幕宽度
+     */
+    private void getWindowWidthAndHeight() {
+        WindowManager manager = this.getWindowManager();
+        DisplayMetrics metrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(metrics);
+        this.width = metrics.widthPixels;
+//        this.heigth = metrics.heightPixels;
     }
 }
