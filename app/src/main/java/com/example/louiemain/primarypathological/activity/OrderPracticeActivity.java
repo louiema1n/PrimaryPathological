@@ -31,14 +31,20 @@ public class OrderPracticeActivity extends BasePracticeActivity {
     }
 
     @Override
+    public String getNumber() {
+        return "当前题目: " + id + "/2140";
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_next:
+                id++;
                 // 刷新
                 onDestroy();
                 onCreate(null);
                 // 生成随机id
-                if (id++ > 2140) {
+                if (id > 2140) {
                     finish();
                     Toast.makeText(this, "恭喜你！完成了所有的题目练习。", Toast.LENGTH_SHORT).show();
                 } else {

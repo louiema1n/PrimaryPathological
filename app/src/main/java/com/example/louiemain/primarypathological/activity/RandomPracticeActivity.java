@@ -9,10 +9,12 @@ import com.example.louiemain.primarypathological.base.BasePracticeActivity;
 import java.util.Random;
 
 public class RandomPracticeActivity extends BasePracticeActivity {
+    private String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        id = String.valueOf(new Random().nextInt(2140) + 1);
         super.onCreate(savedInstanceState);
-        super.generatePractice(String.valueOf(new Random().nextInt(2140) + 1));
+        super.generatePractice(id);
     }
 
     @Override
@@ -29,6 +31,11 @@ public class RandomPracticeActivity extends BasePracticeActivity {
     }
 
     @Override
+    public String getNumber() {
+        return "随机题目: " + id;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_next:
@@ -36,7 +43,8 @@ public class RandomPracticeActivity extends BasePracticeActivity {
                 onDestroy();
                 onCreate(null);
                 // 生成随机id
-                super.generatePractice(String.valueOf(new Random().nextInt(2140) + 1));
+                id = String.valueOf(new Random().nextInt(2140) + 1);
+                super.generatePractice(id);
                 break;
         }
         return super.onOptionsItemSelected(item);

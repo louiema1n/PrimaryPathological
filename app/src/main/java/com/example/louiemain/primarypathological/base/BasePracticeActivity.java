@@ -45,6 +45,7 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     // 位置
     private int position;
     private LinearLayout ly_result_analysis;
+    private TextView tv_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +80,19 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         tv_commons = (TextView) findViewById(R.id.tv_commons);
         rg_option = (RadioGroup) findViewById(R.id.rg_option);
         ly_result_analysis = (LinearLayout) findViewById(R.id.ly_result_analysis);
+        tv_number = (TextView) findViewById(R.id.tv_number);
 
         // 设置toolbar
         setSupportActionBar(toolbar_practice);
         // 设置title
         tv_title.setText(getToolbarTitle());
+        // 设置当前题目数
+        tv_number.setText(getNumber());
     }
 
     /**
      * 监听view的点击事件
+     *
      * @param v
      */
     @Override
@@ -113,6 +118,7 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
 
     /**
      * 根据id生成题目
+     *
      * @param id
      */
     public void generatePractice(String id) {
@@ -213,6 +219,7 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
 
     /**
      * 处理题目名称
+     *
      * @param cursorExam
      * @return
      */
@@ -220,12 +227,15 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
 
     /**
      * 设置toolbar title
+     *
      * @return
      */
     public abstract String getToolbarTitle();
+    public abstract String getNumber();
 
     /**
      * 设置menu
+     *
      * @param menu
      * @return
      */
@@ -237,6 +247,7 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
 
     /**
      * 监听toolbar的点击事件
+     *
      * @param item
      * @return
      */
