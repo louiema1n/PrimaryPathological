@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/ll_exam_root"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.example.louiemain.primarypathological.activity.RandomPracticeActivity">
+<LinearLayout
+        android:id="@+id/ll_exam_root"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.louiemain.primarypathological.activity.RandomPracticeActivity">
 
-    <LinearLayout
-            android:layout_width="match_parent"
+    <!-- toolbar -->
+    <include layout="@layout/toolbar_secend"/>
+
+    <ScrollView
             android:layout_height="match_parent"
-            android:orientation="vertical">
-        <!-- toolbar -->
-        <include layout="@layout/toolbar_secend"/>
+            android:layout_width="match_parent">
 
         <LinearLayout
                 android:id="@+id/ll_exam"
@@ -135,6 +137,5 @@
                         />
             </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
