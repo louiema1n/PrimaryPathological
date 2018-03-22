@@ -21,7 +21,11 @@
                 android:name=".activity.MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/BaseTheme"/>
-        <activity android:name=".activity.RandomPracticeActivity"
+        <activity
+                android:name=".activity.RandomPracticeActivity"
+                android:theme="@style/BaseTheme">
+        </activity>
+        <activity android:name=".activity.OrderPracticeActivity"
                   android:theme="@style/BaseTheme">
         </activity>
     </application>

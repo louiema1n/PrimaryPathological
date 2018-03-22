@@ -6,26 +6,27 @@ import android.view.MenuItem;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.base.BasePracticeActivity;
 
-import java.util.Random;
+public class OrderPracticeActivity extends BasePracticeActivity {
 
-public class RandomPracticeActivity extends BasePracticeActivity {
+    private int id = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.generatePractice(String.valueOf(new Random().nextInt(2140) + 1));
+        super.generatePractice(String.valueOf(id));
     }
 
     @Override
     public String handleName(Cursor cursorExam) {
-        // 去掉前面的数字
+        // 去掉前面的数字前面加上id
         String name = cursorExam.getString(cursorExam.getColumnIndex("name"));
-        name = name.replaceFirst("\\d+.", "");
+        name = id + name.replaceFirst("\\d+", "");
         return name;
     }
 
     @Override
     public String getToolbarTitle() {
-        return this.getString(R.string.random) + this.getString(R.string.actionbar_Practice_text);
+        return this.getString(R.string.order) + this.getString(R.string.actionbar_Practice_text);
     }
 
     @Override
@@ -36,10 +37,10 @@ public class RandomPracticeActivity extends BasePracticeActivity {
                 onDestroy();
                 onCreate(null);
                 // 生成随机id
-                super.generatePractice(String.valueOf(new Random().nextInt(2140) + 1));
+                super.generatePractice(String.valueOf(++id));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-}
 
+}

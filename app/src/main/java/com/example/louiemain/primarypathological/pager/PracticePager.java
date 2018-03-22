@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import com.example.louiemain.primarypathological.R;
+import com.example.louiemain.primarypathological.activity.OrderPracticeActivity;
 import com.example.louiemain.primarypathological.activity.RandomPracticeActivity;
 import com.example.louiemain.primarypathological.base.BasePager;
 import com.example.louiemain.primarypathological.view.DrawableVerticalButton;
@@ -50,15 +51,17 @@ public class PracticePager extends BasePager {
 
         @Override
         public void onClick(View v) {
+            Intent intent = null;
             switch (v.getId()) {
                 case R.id.btn_order:
-
+                    intent = new Intent(context, OrderPracticeActivity.class);
                     break;
                 case R.id.btn_random:
-                    Intent intent = new Intent(context, RandomPracticeActivity.class);
-                    context.startActivity(intent);
+                    intent = new Intent(context, RandomPracticeActivity.class);
                     break;
             }
+            context.startActivity(intent);
+
         }
     }
 
