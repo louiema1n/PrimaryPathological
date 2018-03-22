@@ -108,13 +108,17 @@ public class RandomPracticeActivity extends AppCompatActivity implements View.On
 
             // cursor置顶
             cursorExam.moveToFirst();
-//        String rid = cursorExam.getString(cursorExam.getColumnIndex("rid"));
             if (cursorExam != null) {
                 // 设置exam
+                // 去掉前面的数字
+                String name = cursorExam.getString(cursorExam.getColumnIndex("name"));
+                name = name.replaceFirst("\\d+.", "");
+                // 去掉前面的数字
                 String commons = cursorExam.getString(cursorExam.getColumnIndex("commons"));    // commons
-                commons = commons.replace("<br>", "\n");
+                commons = commons.replaceFirst("\\d+.", "").replace("<br>", "\n");
+
                 anser = cursorExam.getString(cursorExam.getColumnIndex("anser"));        // anser
-                tv_name.setText(cursorExam.getString(cursorExam.getColumnIndex("name")));
+                tv_name.setText(name);
                 tv_anser.setText("答案 " + anser);
                 tv_analysis.setText(cursorExam.getString(cursorExam.getColumnIndex("analysis")));
                 tv_commons.setText(commons);
