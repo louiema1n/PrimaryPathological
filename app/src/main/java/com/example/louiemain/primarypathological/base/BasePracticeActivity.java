@@ -49,7 +49,9 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     // 定义gestureDetector手势识别器
     private GestureDetector gestureDetector;
 
-    private int width;
+    private boolean flag;
+    private int FLING_MIN_DISTANCE;
+    private int FLING_MIN_VELOCITY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,12 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         tv_title.setText(getToolbarTitle());
         // 设置当前题目数
         tv_number.setText(getNumber());
+
+        // 初始化屏幕宽度
+        if (!flag) {
+            getWindowWidthAndHeight();
+            flag = true;
+        }
     }
 
     /**
@@ -266,13 +274,10 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-    private int FLING_MIN_DISTANCE = (int) (width * 0.5);   //最小距离
-    private static final int FLING_MIN_VELOCITY = 20;  //最小速度
     GestureDetector.SimpleOnGestureListener MyGestureDetector = new  GestureDetector.SimpleOnGestureListener() {
         // 滑动结束时触发
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            getWindowWidthAndHeight();
             float left = e1.getX() - e2.getX();     // e1.getX() > e2.getX()-左
             float right = e2.getX() - e1.getX();     // e1.getX() > e2.getX()-左
             // 向右滑
@@ -310,7 +315,8 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         WindowManager manager = this.getWindowManager();
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(metrics);
-        this.width = metrics.widthPixels;
+        this.FLING_MIN_DISTANCE = (int) (metrics.widthPixels * 0.15);
+        this.FLING_MIN_VELOCITY = this.FLING_MIN_DISTANCE / 4;
 //        this.heigth = metrics.heightPixels;
     }
 }

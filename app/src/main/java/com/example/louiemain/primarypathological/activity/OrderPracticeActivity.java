@@ -54,7 +54,8 @@ public class OrderPracticeActivity extends BasePracticeActivity {
         onDestroy();
         onCreate(null);
         // 生成随机id
-        if (id > 2140) {
+        if (id >= 2140) {
+            id = 2140;
             finish();
             Toast.makeText(this, "恭喜你！完成了所有的题目练习。", Toast.LENGTH_SHORT).show();
         } else {
@@ -68,6 +69,7 @@ public class OrderPracticeActivity extends BasePracticeActivity {
     public void upTopic() {
         id--;
         if (id < 1) {
+            id = 1;
             Toast.makeText(this, "这是第一个题目，别翻了。", Toast.LENGTH_SHORT).show();
         } else {
             onDestroy();
