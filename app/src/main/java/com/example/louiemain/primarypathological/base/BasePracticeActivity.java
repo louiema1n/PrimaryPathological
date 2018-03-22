@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.utils.DatabaseHelper;
@@ -47,6 +45,9 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     private LinearLayout ly_result_analysis;
     private TextView tv_number;
 
+    // 定义gestureDetector手势识别器
+    private GestureDetector gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +82,8 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         rg_option = (RadioGroup) findViewById(R.id.rg_option);
         ly_result_analysis = (LinearLayout) findViewById(R.id.ly_result_analysis);
         tv_number = (TextView) findViewById(R.id.tv_number);
+
+        gestureDetector = new GestureDetector(this, MyGestureDetector);
 
         // 设置toolbar
         setSupportActionBar(toolbar_practice);
@@ -258,5 +261,31 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private static final int FLING_MIN_DISTANCE = 50;   //最小距离
+    private static final int FLING_MIN_VELOCITY = 20;  //最小速度
+    GestureDetector.SimpleOnGestureListener MyGestureDetector = new  GestureDetector.SimpleOnGestureListener() {
+        // 滑动结束时触发
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float left = e1.getX() - e2.getX();     // e1.getX() > e2.getX()-左
+            float right = e2.getX() - e1.getX();     // e1.getX() > e2.getX()-左
+            // 向右滑
+            if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+                Toast.makeText(BasePracticeActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+            } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+                // 向左滑
+                Toast.makeText(BasePracticeActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    };
+
+    // 将触摸事件传递给gestureDetector-当子view消费touch事件时使用dispatchTouchEvent
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        gestureDetector.onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 }
