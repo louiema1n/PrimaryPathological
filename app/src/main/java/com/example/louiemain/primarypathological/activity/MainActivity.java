@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
 import android.widget.RadioGroup;
@@ -65,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
     // 当前点击视图的位置-对应其在集合中的index
     private int position;
 
+    // 试图识别器
+    private GestureDetector gestureDetector;
+    private boolean flag;
+    private int FLING_MIN_DISTANCE;
+    private int FLING_MIN_VELOCITY;
+
+    // 是否滑动
+    private boolean isSlide;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +106,48 @@ public class MainActivity extends AppCompatActivity {
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
         // 获取数据库操作对象
         helper = new DatabaseHelper(this, "topic", null, 13);
+
+        gestureDetector = new GestureDetector(this, MyGestureDetector);
+
+        // 初始化屏幕宽度
+        if (!flag) {
+            getWindowWidthAndHeight();
+            flag = true;
+        }
     }
 
+    GestureDetector.SimpleOnGestureListener MyGestureDetector = new  GestureDetector.SimpleOnGestureListener() {
+        // 滑动结束时触发
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float left = e1.getX() - e2.getX();     // e1.getX() > e2.getX()-左
+            float right = e2.getX() - e1.getX();     // e1.getX() > e2.getX()-左
+            // 向右滑
+            if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+//                rightFlyingHandle();
+                Toast.makeText(MainActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+            } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+                // 向左滑
+//                leftFlyingHandle();
+                Toast.makeText(MainActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
+            }
+            isSlide = true;
+            // 自己消费-滑动时不允许触发点击事件
+            return false;
+//            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            Toast.makeText(MainActivity.this, "单击", Toast.LENGTH_SHORT).show();
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return super.onDown(e);
+        }
+    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -141,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         String result = "";
-//                        url = new URL("http://192.168.110.94/blcj/get/" + i);
-                        url = new URL("http://192.168.1.102/blcj/get/" + i);
+                        url = new URL("http://192.168.110.94/blcj/get/" + i);
+//                        url = new URL("http://192.168.1.102/blcj/get/" + i);
                         conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("GET");
                         conn.setConnectTimeout(3000);
@@ -432,6 +482,32 @@ public class MainActivity extends AppCompatActivity {
 
         // 4.提交事务
         transaction.commit();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        gestureDetector.onTouchEvent(ev);
+        super.dispatchTouchEvent(ev);
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        Toast.makeText(this, "onTouchEvent", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    /**
+     * 获取屏幕宽度
+     */
+    private void getWindowWidthAndHeight() {
+        WindowManager manager = this.getWindowManager();
+        DisplayMetrics metrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(metrics);
+        this.FLING_MIN_DISTANCE = (int) (metrics.widthPixels * 0.15);
+        this.FLING_MIN_VELOCITY = this.FLING_MIN_DISTANCE / 4;
+//        this.heigth = metrics.heightPixels;
     }
 
 }

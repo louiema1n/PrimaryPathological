@@ -287,7 +287,15 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
                 // 向左滑
                 leftFlyingHandle();
             }
-            return super.onFling(e1, e2, velocityX, velocityY);
+            // 自己消费-滑动时不允许触发点击事件
+            return true;
+//            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            Toast.makeText(BasePracticeActivity.this, "单击", Toast.LENGTH_SHORT).show();
+            return super.onSingleTapUp(e);
         }
     };
 
