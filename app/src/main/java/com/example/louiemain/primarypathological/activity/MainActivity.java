@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.example.louiemain.primarypathological.R;
@@ -132,21 +133,24 @@ public class MainActivity extends AppCompatActivity {
             // 向右滑
             if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 //                rightFlyingHandle();
-                Toast.makeText(MainActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+                // 切换底部栏
                 position--;
                 if (position < 0) {
                     position = 0;
                 }
-                rg_bottom_tag.check(rbs[position]);
+                RadioButton button = (RadioButton) rg_bottom_tag.getChildAt(position);
+                button.setChecked(true);
             } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
                 // 向左滑
 //                leftFlyingHandle();
-                Toast.makeText(MainActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
                 position++;
                 if (position > 3) {
                     position = 3;
                 }
-                rg_bottom_tag.check(rbs[position]);
+                RadioButton button = (RadioButton) rg_bottom_tag.getChildAt(position);
+                button.setChecked(true);
             }
             isSlide = true;
             // 自己消费-滑动时不允许触发点击事件
@@ -157,13 +161,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Toast.makeText(MainActivity.this, "单击", Toast.LENGTH_SHORT).show();
+            isSlide = false;
             return super.onSingleTapUp(e);
+//            return false;
         }
 
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return super.onDown(e);
-        }
     };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -208,8 +210,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         String result = "";
-                        url = new URL("http://192.168.110.94/blcj/get/" + i);
-//                        url = new URL("http://192.168.1.102/blcj/get/" + i);
+//                        url = new URL("http://192.168.110.94/blcj/get/" + i);
+                        url = new URL("http://192.168.1.102/blcj/get/" + i);
                         conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("GET");
                         conn.setConnectTimeout(3000);
@@ -504,16 +506,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         gestureDetector.onTouchEvent(ev);
-//        super.dispatchTouchEvent(ev);
-        return false;
+//        if (isSlide) {
+//            return false;
+//        }
+        return super.dispatchTouchEvent(ev);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
-        Toast.makeText(this, "onTouchEvent", Toast.LENGTH_SHORT).show();
-        return false;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+////        gestureDetector.onTouchEvent(event);
+//        Toast.makeText(this, "onTouchEvent", Toast.LENGTH_SHORT).show();
+//        return false;
+//    }
 
     /**
      * 获取屏幕宽度
