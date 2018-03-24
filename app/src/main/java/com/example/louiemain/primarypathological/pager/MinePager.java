@@ -20,6 +20,7 @@ import com.example.louiemain.primarypathological.base.BasePager;
  **/
 public class MinePager extends BasePager {
 
+    private TextView textView;
 
     public MinePager(Context context) {
         super(context);
@@ -27,12 +28,16 @@ public class MinePager extends BasePager {
 
     @Override
     public View initView() {
-        View view = View.inflate(context, R.layout.layout_practice, null);
-        return view;
+        textView = new TextView(context);
+        textView.setTextColor(Color.RED);
+        textView.setTextSize(30);
+        textView.setGravity(Gravity.CENTER);
+        return textView;
     }
 
     @Override
     public void initData() {
         super.initData();
+        textView.setText("我的");
     }
 }
