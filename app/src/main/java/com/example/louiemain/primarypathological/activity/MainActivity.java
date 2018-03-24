@@ -75,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
     // 是否滑动
     private boolean isSlide;
 
+    // radiobutton数据
+    private int[] rbs = new int[4];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar_simple);
 
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
+        // 初始化radiobutton id数组
+        for (int i = 0; i < rg_bottom_tag.getChildCount(); i++) {
+            rbs[i] = rg_bottom_tag.getChildAt(i).getId();
+        }
         // 获取数据库操作对象
         helper = new DatabaseHelper(this, "topic", null, 13);
 
@@ -126,10 +133,20 @@ public class MainActivity extends AppCompatActivity {
             if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 //                rightFlyingHandle();
                 Toast.makeText(MainActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
+                position--;
+                if (position < 0) {
+                    position = 0;
+                }
+                rg_bottom_tag.check(rbs[position]);
             } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
                 // 向左滑
 //                leftFlyingHandle();
                 Toast.makeText(MainActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
+                position++;
+                if (position > 3) {
+                    position = 3;
+                }
+                rg_bottom_tag.check(rbs[position]);
             }
             isSlide = true;
             // 自己消费-滑动时不允许触发点击事件
@@ -487,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         gestureDetector.onTouchEvent(ev);
-        super.dispatchTouchEvent(ev);
+//        super.dispatchTouchEvent(ev);
         return false;
     }
 
