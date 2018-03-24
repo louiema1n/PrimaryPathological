@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.base.BasePager;
 
 /**
@@ -19,7 +20,6 @@ import com.example.louiemain.primarypathological.base.BasePager;
  **/
 public class MinePager extends BasePager {
 
-    private TextView textView;
 
     public MinePager(Context context) {
         super(context);
@@ -27,16 +27,12 @@ public class MinePager extends BasePager {
 
     @Override
     public View initView() {
-        textView = new TextView(context);
-        textView.setTextColor(Color.RED);
-        textView.setTextSize(30);
-        textView.setGravity(Gravity.CENTER);
-        return textView;
+        View view = View.inflate(context, R.layout.layout_practice, null);
+        return view;
     }
 
     @Override
     public void initData() {
         super.initData();
-        textView.setText("我的");
     }
 }

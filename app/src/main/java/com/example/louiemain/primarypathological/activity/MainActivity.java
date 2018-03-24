@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         toolbar_simple = (Toolbar) findViewById(R.id.toolbar_simple);
+        rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
 
         // 设置menu
 //        toolbar_simple.inflateMenu(R.menu.menu);
@@ -115,25 +117,24 @@ public class MainActivity extends AppCompatActivity {
         // 获取数据库操作对象
         helper = new DatabaseHelper(this, "topic", null, 13);
 
-        gestureDetector = new GestureDetector(this, MyGestureDetector);
+        gestureDetector = new GestureDetector(this, new simpleGestureListener());
 
         // 初始化屏幕宽度
         if (!flag) {
             getWindowWidthAndHeight();
             flag = true;
         }
+
     }
 
-    GestureDetector.SimpleOnGestureListener MyGestureDetector = new  GestureDetector.SimpleOnGestureListener() {
-        // 滑动结束时触发
+    class simpleGestureListener extends GestureDetector.SimpleOnGestureListener {
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float left = e1.getX() - e2.getX();     // e1.getX() > e2.getX()-左
             float right = e2.getX() - e1.getX();     // e1.getX() > e2.getX()-左
             // 向右滑
             if (right > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-//                rightFlyingHandle();
-//                Toast.makeText(MainActivity.this, "向右滑", Toast.LENGTH_SHORT).show();
                 // 切换底部栏
                 position--;
                 if (position < 0) {
@@ -143,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
                 button.setChecked(true);
             } else if (left > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
                 // 向左滑
-//                leftFlyingHandle();
-//                Toast.makeText(MainActivity.this, "向左滑", Toast.LENGTH_SHORT).show();
                 position++;
                 if (position > 3) {
                     position = 3;
@@ -152,21 +151,16 @@ public class MainActivity extends AppCompatActivity {
                 RadioButton button = (RadioButton) rg_bottom_tag.getChildAt(position);
                 button.setChecked(true);
             }
-            isSlide = true;
-            // 自己消费-滑动时不允许触发点击事件
-            return false;
-//            return super.onFling(e1, e2, velocityX, velocityY);
+            return super.onFling(e1, e2, velocityX, velocityY);
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Toast.makeText(MainActivity.this, "单击", Toast.LENGTH_SHORT).show();
-            isSlide = false;
+            Toast.makeText(MainActivity.this, "单击1", Toast.LENGTH_SHORT).show();
             return super.onSingleTapUp(e);
-//            return false;
         }
-
-    };
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -503,22 +497,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        gestureDetector.onTouchEvent(ev);
-//        if (isSlide) {
-//            return false;
-//        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-////        gestureDetector.onTouchEvent(event);
-//        Toast.makeText(this, "onTouchEvent", Toast.LENGTH_SHORT).show();
-//        return false;
-//    }
-
     /**
      * 获取屏幕宽度
      */
@@ -531,4 +509,14 @@ public class MainActivity extends AppCompatActivity {
 //        this.heigth = metrics.heightPixels;
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        gestureDetector.onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.louiemain.primarypathological.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -10,7 +11,7 @@ import android.view.View;
  * @Author: louiemain
  * @Create: 2018-03-13 12:38
  **/
-public abstract class BasePager {
+public abstract class BasePager extends Activity {
 
     // 是否已经初始化数据-（不是static，每个实例单独继承一个 默认为false）
     public boolean isInitData;

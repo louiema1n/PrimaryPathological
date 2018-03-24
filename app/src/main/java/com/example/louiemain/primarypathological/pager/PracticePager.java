@@ -2,7 +2,9 @@ package com.example.louiemain.primarypathological.pager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 import com.example.louiemain.primarypathological.R;
 import com.example.louiemain.primarypathological.activity.OrderPracticeActivity;
 import com.example.louiemain.primarypathological.activity.RandomPracticeActivity;
@@ -21,9 +23,6 @@ import com.example.louiemain.primarypathological.view.DrawableVerticalButton;
  **/
 public class PracticePager extends BasePager {
 
-    private DrawableVerticalButton btn_order;
-    private DrawableVerticalButton btn_random;
-
     public PracticePager(Context context) {
         super(context);
     }
@@ -31,42 +30,12 @@ public class PracticePager extends BasePager {
     @Override
     public View initView() {
         View view = View.inflate(context, R.layout.layout_practice, null);
-        // 初始化组件
-        btn_order = (DrawableVerticalButton) view.findViewById(R.id.btn_order);
-        btn_random = (DrawableVerticalButton) view.findViewById(R.id.btn_random);
-
-        // 设置组件监听
-        btn_order.setOnClickListener(new MyOnClickListener());
-        btn_random.setOnClickListener(new MyOnClickListener());
         return view;
-    }
-
-    /**
-     * @description 监听
-     * @author louiemain
-     * @date Created on 2018/3/19 20:54
-     * @return
-     */
-    class MyOnClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = null;
-            switch (v.getId()) {
-                case R.id.btn_order:
-                    intent = new Intent(context, OrderPracticeActivity.class);
-                    break;
-                case R.id.btn_random:
-                    intent = new Intent(context, RandomPracticeActivity.class);
-                    break;
-            }
-            context.startActivity(intent);
-
-        }
     }
 
     @Override
     public void initData() {
         super.initData();
     }
+
 }

@@ -247,6 +247,10 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     public abstract String getToolbarTitle();
     public abstract String getNumber();
 
+
+    // 是否滑动
+    private boolean isSlide = false;
+
     /**
      * 设置menu
      *
@@ -288,13 +292,15 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
                 leftFlyingHandle();
             }
             // 自己消费-滑动时不允许触发点击事件
-            return true;
-//            return super.onFling(e1, e2, velocityX, velocityY);
+            isSlide = true;
+//            return true;
+            return super.onFling(e1, e2, velocityX, velocityY);
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Toast.makeText(BasePracticeActivity.this, "单击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(BasePracticeActivity.this, "单击", Toast.LENGTH_SHORT).show();
+            isSlide = false;
             return super.onSingleTapUp(e);
         }
     };
@@ -313,6 +319,9 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         gestureDetector.onTouchEvent(ev);
+        if (isSlide) {
+            return true;
+        }
         return super.dispatchTouchEvent(ev);
     }
 
