@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Toast.makeText(MainActivity.this, "单击1", Toast.LENGTH_SHORT).show();
             return super.onSingleTapUp(e);
         }
     }
