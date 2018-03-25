@@ -8,4 +8,6 @@
     <string name="order">顺序</string>
     <string name="random">随机</string>
     <string name="update">更新数据</string>
+    <string name="settings">设置</string>
+    <string name="syn_db">SynDB</string>
 </resources>

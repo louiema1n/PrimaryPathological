@@ -9,4 +9,6 @@
     <string name="order">Order</string>
     <string name="random">Random</string>
     <string name="update">Update</string>
+    <string name="settings">Settings</string>
+    <string name="syn_db">SynDB</string>
 </resources>

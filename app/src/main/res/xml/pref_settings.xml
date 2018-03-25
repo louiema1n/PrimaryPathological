@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:key="@string/pref_key_user_setting"
+            android:title="@string/pref_title_user_settings">
+    </PreferenceCategory>
+
+    <Preference android:key="@string/pref_key_user_info"/>
+
+    <EditTextPreference
+            android:key="@string/pref_key_user_vip"
+            android:title="@string/pref_title_user_vip"
+            android:summary="@string/pref_summary_user_vip"
+            android:defaultValue="0"
+            android:inputType="number"/>
+
+    <SwitchPreference
+            android:key="@string/pref_key_net_offline"
+            android:title="@string/pref_title_net_offline"
+            android:summary="@string/pref_summary_net_offline"/>
+
+    <PreferenceScreen
+            android:key="test"
+            android:title="TestNestSetting"
+            android:icon="@drawable/ic_exam"
+            />
+
+</PreferenceScreen>

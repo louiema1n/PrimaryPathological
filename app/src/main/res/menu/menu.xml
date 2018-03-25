@@ -4,6 +4,11 @@
     <item
             android:id="@+id/action_syn_db"
             android:icon="@mipmap/ic_database"
-            android:title=""
-            app:showAsAction="ifRoom"/>
+            android:title="@string/syn_db"
+            app:showAsAction="never"/>
+    <item
+            android:id="@+id/action_settings"
+            android:icon="@mipmap/ic_settings"
+            android:title="@string/settings"
+            app:showAsAction="never"/>
 </menu>

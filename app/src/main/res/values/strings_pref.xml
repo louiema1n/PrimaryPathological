@@ -1,0 +1,11 @@
+<resources>
+    <string name="pref_key_user_setting">UserSettingKey</string>
+    <string name="pref_title_user_settings">UserSettingTitle</string>
+    <string name="pref_key_user_info">UserInfo</string>
+    <string name="pref_key_user_vip">UserVip</string>
+    <string name="pref_summary_user_vip">SummaryUserVip</string>
+    <string name="pref_title_user_vip">TitleUserVip</string>
+    <string name="pref_key_net_offline">NetOffline</string>
+    <string name="pref_summary_net_offline">NetOfflineSummary</string>
+    <string name="pref_title_net_offline">NetOfflineTitle</string>
+</resources>

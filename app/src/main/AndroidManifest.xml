@@ -29,6 +29,9 @@
                 android:name=".activity.OrderPracticeActivity"
                 android:theme="@style/BaseTheme">
         </activity>
+        <activity android:name=".activity.SettingsActivity"
+                  android:theme="@style/BaseTheme">
+        </activity>
     </application>
 
 </manifest>
