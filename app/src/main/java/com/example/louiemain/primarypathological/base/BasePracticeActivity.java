@@ -83,6 +83,7 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
         rb_d.setOnClickListener(this);
         rb_e = (RadioButton) findViewById(R.id.rb_e);
         rb_e.setOnClickListener(this);
+
         tv_commons = (TextView) findViewById(R.id.tv_commons);
         rg_option = (RadioGroup) findViewById(R.id.rg_option);
         ly_result_analysis = (LinearLayout) findViewById(R.id.ly_result_analysis);
@@ -111,23 +112,25 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rb_a:
-                initRightResult();
-                break;
-            case R.id.rb_b:
-                initRightResult();
-                break;
-            case R.id.rb_c:
-                initRightResult();
-                break;
-            case R.id.rb_d:
-                initRightResult();
-                break;
-            case R.id.rb_e:
-                initRightResult();
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.rb_a:
+//                initRightResult();
+//                break;
+//            case R.id.rb_b:
+//                initRightResult();
+//                break;
+//            case R.id.rb_c:
+//                initRightResult();
+//                break;
+//            case R.id.rb_d:
+//                initRightResult();
+//                break;
+//            case R.id.rb_e:
+//                initRightResult();
+//                break;
+//        }
+        initRightResult();
+
     }
 
     /**
@@ -247,10 +250,6 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     public abstract String getToolbarTitle();
     public abstract String getNumber();
 
-
-    // 是否滑动
-    private boolean isSlide = false;
-
     /**
      * 设置menu
      *
@@ -292,17 +291,9 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
                 leftFlyingHandle();
             }
             // 自己消费-滑动时不允许触发点击事件
-            isSlide = true;
-//            return true;
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-//            Toast.makeText(BasePracticeActivity.this, "单击", Toast.LENGTH_SHORT).show();
-            isSlide = false;
-            return super.onSingleTapUp(e);
-        }
     };
 
     /**
@@ -319,9 +310,6 @@ public abstract class BasePracticeActivity extends AppCompatActivity implements 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         gestureDetector.onTouchEvent(ev);
-        if (isSlide) {
-            return true;
-        }
         return super.dispatchTouchEvent(ev);
     }
 
